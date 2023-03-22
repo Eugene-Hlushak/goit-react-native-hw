@@ -5,19 +5,12 @@ import {
   TextInput,
   View,
   TouchableOpacity,
-  Image,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 
-export default function LogInScreen() {
-  const [loginValue, setLoginValue] = useState("");
+export default function RegistrationScreen() {
   const [emailValue, setEmailValue] = useState("");
   const [paswordValue, setPaswordValue] = useState("");
   const [showPassword, setShowPassword] = useState(true);
-
-  const loginInputHandler = (text) => {
-    setLoginValue(text);
-  };
 
   const emailInputHandler = (text) => {
     setEmailValue(text);
@@ -33,24 +26,8 @@ export default function LogInScreen() {
 
   return (
     <View style={styles.registrationScreen}>
-      <View style={styles.addPhotoBox}>
-        <Image style={styles.image} />
-        <Ionicons
-          style={styles.addPhotoIcon}
-          name="add-circle-outline"
-          size={25}
-          color="#FF6C00"
-        />
-      </View>
       <View style={styles.formContainer}>
-        <Text style={styles.title}>Реєстрація</Text>
-        <TextInput
-          style={[styles.formInput, styles.formInputContainer]}
-          placeholder="Логін"
-          value={loginValue}
-          onChangeText={loginInputHandler}
-          placeholderTextColor={"#BDBDBD"}
-        />
+        <Text style={styles.title}>Увійти</Text>
         <TextInput
           style={[styles.formInput, styles.formInputContainer]}
           placeholder="Електронна пошта"
@@ -78,10 +55,10 @@ export default function LogInScreen() {
           </TouchableOpacity>
         </View>
         <TouchableOpacity style={styles.regBtn} activeOpacity={0.5}>
-          <Text style={styles.regBtnTitle}>Зареєструватись</Text>
+          <Text style={styles.regBtnTitle}>Увійти</Text>
         </TouchableOpacity>
       </View>
-      <Text style={styles.linkToLogIn}>Вже є аккаунт? Увійти.</Text>
+      <Text style={styles.linkToLogIn}>Нема аккаунту? Зареєструватися.</Text>
     </View>
   );
 }
@@ -89,7 +66,7 @@ export default function LogInScreen() {
 const styles = StyleSheet.create({
   registrationScreen: {
     position: "relative",
-    flex: 0.6,
+    flex: 0.4,
 
     paddingHorizontal: 16,
     backgroundColor: "#fff",
@@ -97,27 +74,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
   },
 
-  addPhotoBox: {
-    alignItems: "center",
-  },
-
-  image: {
-    position: "absolute",
-    top: -60,
-    width: 120,
-    height: 120,
-    backgroundColor: "#F6F6F6",
-    borderRadius: 16,
-  },
-
-  addPhotoIcon: {
-    top: 21,
-    right: 124,
-    position: "absolute",
-  },
-
   formContainer: {
-    paddingTop: 92,
+    paddingTop: 32,
   },
 
   title: {
