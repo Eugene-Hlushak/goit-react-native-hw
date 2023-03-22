@@ -6,6 +6,8 @@ import {
   View,
   TouchableOpacity,
   Image,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -31,58 +33,85 @@ export default function LogInScreen() {
     setShowPassword(!showPassword);
   };
 
+  const onSubmit = () => {
+    console.log(`UserData:
+    login - ${loginValue},
+     email - ${emailValue},
+     password - ${paswordValue}`);
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setEmailValue("");
+    setLoginValue("");
+    setPaswordValue("");
+  };
+
   return (
-    <View style={styles.registrationScreen}>
-      <View style={styles.addPhotoBox}>
-        <Image style={styles.image} />
-        <Ionicons
-          style={styles.addPhotoIcon}
-          name="add-circle-outline"
-          size={25}
-          color="#FF6C00"
-        />
-      </View>
-      <View style={styles.formContainer}>
-        <Text style={styles.title}>Реєстрація</Text>
-        <TextInput
-          style={[styles.formInput, styles.formInputContainer]}
-          placeholder="Логін"
-          value={loginValue}
-          onChangeText={loginInputHandler}
-          placeholderTextColor={"#BDBDBD"}
-        />
-        <TextInput
-          style={[styles.formInput, styles.formInputContainer]}
-          placeholder="Електронна пошта"
-          value={emailValue}
-          onChangeText={emailInputHandler}
-          placeholderTextColor={"#BDBDBD"}
-        />
-        <View style={styles.formInputPassContainer}>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.registrationScreen}>
+        <View style={styles.addPhotoBox}>
+          <Image
+            style={styles.image}
+            onPress={() => console.log("Plese, add your profile photo")}
+          />
+
+          <Ionicons
+            style={styles.addPhotoIcon}
+            name="add-circle-outline"
+            size={25}
+            color="#FF6C00"
+            onPress={() => console.log("Plese, add your profile photo")}
+          />
+        </View>
+        <View style={styles.formContainer}>
+          <Text style={styles.title}>Реєстрація</Text>
           <TextInput
-            style={styles.formInput}
-            placeholder="Пароль"
-            value={paswordValue}
-            onChangeText={passwordInputHandler}
-            secureTextEntry={showPassword}
+            style={[styles.formInput, styles.formInputContainer]}
+            placeholder="Логін"
+            inputMode="text"
+            value={loginValue}
+            onChangeText={loginInputHandler}
             placeholderTextColor={"#BDBDBD"}
           />
+          <TextInput
+            style={[styles.formInput, styles.formInputContainer]}
+            placeholder="Електронна пошта"
+            inputMode="email"
+            value={emailValue}
+            onChangeText={emailInputHandler}
+            placeholderTextColor={"#BDBDBD"}
+          />
+          <View style={styles.formInputPassContainer}>
+            <TextInput
+              style={styles.formInput}
+              placeholder="Пароль"
+              value={paswordValue}
+              onChangeText={passwordInputHandler}
+              secureTextEntry={showPassword}
+              placeholderTextColor={"#BDBDBD"}
+            />
+            <TouchableOpacity
+              style={styles.showPass}
+              onPress={toggleShowPassword}
+              activeOpacity={0.4}
+            >
+              <Text style={styles.showPassTitle}>
+                {showPassword ? "Показати" : "Сховати"}
+              </Text>
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
-            style={styles.showPass}
-            onPress={toggleShowPassword}
-            activeOpacity={0.4}
+            style={styles.regBtn}
+            activeOpacity={0.5}
+            onPress={onSubmit}
           >
-            <Text style={styles.showPassTitle}>
-              {showPassword ? "Показати" : "Сховати"}
-            </Text>
+            <Text style={styles.regBtnTitle}>Зареєструватись</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.regBtn} activeOpacity={0.5}>
-          <Text style={styles.regBtnTitle}>Зареєструватись</Text>
-        </TouchableOpacity>
+        <Text style={styles.linkToLogIn}>Вже є аккаунт? Увійти.</Text>
       </View>
-      <Text style={styles.linkToLogIn}>Вже є аккаунт? Увійти.</Text>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -90,7 +119,6 @@ const styles = StyleSheet.create({
   registrationScreen: {
     position: "relative",
     flex: 0.6,
-
     paddingHorizontal: 16,
     backgroundColor: "#fff",
     borderTopRightRadius: 25,
@@ -111,9 +139,9 @@ const styles = StyleSheet.create({
   },
 
   addPhotoIcon: {
+    position: "absolute",
     top: 21,
     right: 124,
-    position: "absolute",
   },
 
   formContainer: {
@@ -145,6 +173,7 @@ const styles = StyleSheet.create({
   },
 
   formInputPassContainer: {
+    position: "relative",
     marginBottom: 43,
   },
 

@@ -5,6 +5,8 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 
 export default function RegistrationScreen() {
@@ -24,42 +26,60 @@ export default function RegistrationScreen() {
     setShowPassword(!showPassword);
   };
 
+  const onSubmit = () => {
+    console.log(`UserData:
+     email - ${emailValue},
+     password - ${paswordValue}`);
+    resetForm();
+  };
+  const resetForm = () => {
+    setEmailValue("");
+    setPaswordValue("");
+  };
+
   return (
-    <View style={styles.registrationScreen}>
-      <View style={styles.formContainer}>
-        <Text style={styles.title}>Увійти</Text>
-        <TextInput
-          style={[styles.formInput, styles.formInputContainer]}
-          placeholder="Електронна пошта"
-          value={emailValue}
-          onChangeText={emailInputHandler}
-          placeholderTextColor={"#BDBDBD"}
-        />
-        <View style={styles.formInputPassContainer}>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.registrationScreen}>
+        <View style={styles.formContainer}>
+          <Text style={styles.title}>Увійти</Text>
           <TextInput
-            style={styles.formInput}
-            placeholder="Пароль"
-            value={paswordValue}
-            onChangeText={passwordInputHandler}
-            secureTextEntry={showPassword}
+            style={[styles.formInput, styles.formInputContainer]}
+            placeholder="Електронна пошта"
+            inputMode="email"
+            value={emailValue}
+            onChangeText={emailInputHandler}
             placeholderTextColor={"#BDBDBD"}
           />
+          <View style={styles.formInputPassContainer}>
+            <TextInput
+              style={styles.formInput}
+              placeholder="Пароль"
+              value={paswordValue}
+              onChangeText={passwordInputHandler}
+              secureTextEntry={showPassword}
+              placeholderTextColor={"#BDBDBD"}
+            />
+            <TouchableOpacity
+              style={styles.showPass}
+              onPress={toggleShowPassword}
+              activeOpacity={0.4}
+            >
+              <Text style={styles.showPassTitle}>
+                {showPassword ? "Показати" : "Сховати"}
+              </Text>
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
-            style={styles.showPass}
-            onPress={toggleShowPassword}
-            activeOpacity={0.4}
+            style={styles.regBtn}
+            activeOpacity={0.5}
+            onPress={onSubmit}
           >
-            <Text style={styles.showPassTitle}>
-              {showPassword ? "Показати" : "Сховати"}
-            </Text>
+            <Text style={styles.regBtnTitle}>Увійти</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.regBtn} activeOpacity={0.5}>
-          <Text style={styles.regBtnTitle}>Увійти</Text>
-        </TouchableOpacity>
+        <Text style={styles.linkToLogIn}>Нема аккаунту? Зареєструватися.</Text>
       </View>
-      <Text style={styles.linkToLogIn}>Нема аккаунту? Зареєструватися.</Text>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
