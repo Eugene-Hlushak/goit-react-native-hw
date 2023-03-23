@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   Text,
@@ -6,10 +7,11 @@ import {
   View,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  ImageBackground,
   Keyboard,
 } from "react-native";
 
-export default function RegistrationScreen() {
+export default function RegistrationScreen({ navigation }) {
   const [emailValue, setEmailValue] = useState("");
   const [paswordValue, setPaswordValue] = useState("");
   const [showPassword, setShowPassword] = useState(true);
@@ -44,50 +46,52 @@ export default function RegistrationScreen() {
           source={require("../imgs/Photo-BG.png")}
           style={styles.imageBg}
         >
-          <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <View style={styles.loginContainer}>
-              <View style={styles.formContainer}>
-                <Text style={styles.title}>Увійти</Text>
+          <View style={styles.loginContainer}>
+            <View style={styles.formContainer}>
+              <Text style={styles.title}>Увійти</Text>
+              <TextInput
+                style={[styles.formInput, styles.formInputContainer]}
+                placeholder="Електронна пошта"
+                inputMode="email"
+                value={emailValue}
+                onChangeText={emailInputHandler}
+                placeholderTextColor={"#BDBDBD"}
+              />
+              <View style={styles.formInputPassContainer}>
                 <TextInput
-                  style={[styles.formInput, styles.formInputContainer]}
-                  placeholder="Електронна пошта"
-                  inputMode="email"
-                  value={emailValue}
-                  onChangeText={emailInputHandler}
+                  style={styles.formInput}
+                  placeholder="Пароль"
+                  value={paswordValue}
+                  onChangeText={passwordInputHandler}
+                  secureTextEntry={showPassword}
                   placeholderTextColor={"#BDBDBD"}
                 />
-                <View style={styles.formInputPassContainer}>
-                  <TextInput
-                    style={styles.formInput}
-                    placeholder="Пароль"
-                    value={paswordValue}
-                    onChangeText={passwordInputHandler}
-                    secureTextEntry={showPassword}
-                    placeholderTextColor={"#BDBDBD"}
-                  />
-                  <TouchableOpacity
-                    style={styles.showPass}
-                    onPress={toggleShowPassword}
-                    activeOpacity={0.4}
-                  >
-                    <Text style={styles.showPassTitle}>
-                      {showPassword ? "Показати" : "Сховати"}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
                 <TouchableOpacity
-                  style={styles.regBtn}
-                  activeOpacity={0.5}
-                  onPress={onSubmit}
+                  style={styles.showPass}
+                  onPress={toggleShowPassword}
+                  activeOpacity={0.4}
                 >
-                  <Text style={styles.regBtnTitle}>Увійти</Text>
+                  <Text style={styles.showPassTitle}>
+                    {showPassword ? "Показати" : "Сховати"}
+                  </Text>
                 </TouchableOpacity>
               </View>
+              <TouchableOpacity
+                style={styles.regBtn}
+                activeOpacity={0.5}
+                onPress={onSubmit}
+              >
+                <Text style={styles.regBtnTitle}>Увійти</Text>
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Registration")}
+            >
               <Text style={styles.linkToLogIn}>
                 Немає аккаунту? Зареєструватись.
               </Text>
-            </View>
-          </TouchableWithoutFeedback>
+            </TouchableOpacity>
+          </View>
         </ImageBackground>
         <StatusBar style="auto" />
       </View>
@@ -96,9 +100,19 @@ export default function RegistrationScreen() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+
+  imageBg: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "flex-end",
+  },
+
   loginContainer: {
     position: "relative",
-    flex: 0.4,
+    flex: 0.5,
 
     paddingHorizontal: 16,
     backgroundColor: "#fff",
@@ -113,7 +127,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     fontSize: 30,
-    fontWeight: 500,
+    fontWeight: "500",
     color: "#212121",
     marginBottom: 32,
   },

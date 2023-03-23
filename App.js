@@ -24,22 +24,10 @@ const AppStack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <AppStack.Navigator>
+      <AppStack.Navigator initialRouteName="Registration">
         <AppStack.Screen name="Registration" component={RegistrationScreen} />
-        {/* <AppStack.Screen name="Login" component={LogInScreen} /> */}
+        <AppStack.Screen name="Login" component={LogInScreen} />
       </AppStack.Navigator>
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-
-  image: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "flex-end",
-  },
-});

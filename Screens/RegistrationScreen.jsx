@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function LogInScreen() {
+export default function LogInScreen({ navigation }) {
   const [loginValue, setLoginValue] = useState("");
   const [emailValue, setEmailValue] = useState("");
   const [paswordValue, setPaswordValue] = useState("");
@@ -57,71 +57,71 @@ export default function LogInScreen() {
           source={require("../imgs/Photo-BG.png")}
           style={styles.imageBg}
         >
-          <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <View style={styles.registrationScreen}>
-              <View style={styles.addPhotoBox}>
-                <Image style={styles.image} />
+          <View style={styles.registrationScreen}>
+            <View style={styles.addPhotoBox}>
+              <Image style={styles.image} />
 
-                <TouchableOpacity
-                  style={styles.addPhotoBtn}
-                  onPress={() => Alert.alert("Plese, add your profile photo")}
-                >
-                  <Ionicons
-                    style={styles.addPhotoIcon}
-                    name="add-circle-outline"
-                    size={25}
-                    color="#FF6C00"
-                  />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.formContainer}>
-                <Text style={styles.title}>Реєстрація</Text>
-                <TextInput
-                  style={[styles.formInput, styles.formInputContainer]}
-                  placeholder="Логін"
-                  inputMode="text"
-                  value={loginValue}
-                  onChangeText={loginInputHandler}
-                  placeholderTextColor={"#BDBDBD"}
+              <TouchableOpacity
+                style={styles.addPhotoBtn}
+                onPress={() => Alert.alert("Plese, add your profile photo")}
+              >
+                <Ionicons
+                  style={styles.addPhotoIcon}
+                  name="add-circle-outline"
+                  size={25}
+                  color="#FF6C00"
                 />
-                <TextInput
-                  style={[styles.formInput, styles.formInputContainer]}
-                  placeholder="Електронна пошта"
-                  inputMode="email"
-                  value={emailValue}
-                  onChangeText={emailInputHandler}
-                  placeholderTextColor={"#BDBDBD"}
-                />
-                <View style={styles.formInputPassContainer}>
-                  <TextInput
-                    style={styles.formInput}
-                    placeholder="Пароль"
-                    value={paswordValue}
-                    onChangeText={passwordInputHandler}
-                    secureTextEntry={showPassword}
-                    placeholderTextColor={"#BDBDBD"}
-                  />
-                  <TouchableOpacity
-                    style={styles.showPass}
-                    onPress={toggleShowPassword}
-                    activeOpacity={0.4}
-                  >
-                    <Text style={styles.showPassTitle}>
-                      {showPassword ? "Показати" : "Сховати"}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <TouchableOpacity
-                  style={styles.regBtn}
-                  activeOpacity={0.5}
-                  onPress={onSubmit}
-                >
-                  <Text style={styles.regBtnTitle}>Зареєструватись</Text>
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.linkToLogIn}>Вже є аккаунт? Увійти.</Text>
+              </TouchableOpacity>
             </View>
-          </TouchableWithoutFeedback>
+            <View style={styles.formContainer}>
+              <Text style={styles.title}>Реєстрація</Text>
+              <TextInput
+                style={[styles.formInput, styles.formInputContainer]}
+                placeholder="Логін"
+                inputMode="text"
+                value={loginValue}
+                onChangeText={loginInputHandler}
+                placeholderTextColor={"#BDBDBD"}
+              />
+              <TextInput
+                style={[styles.formInput, styles.formInputContainer]}
+                placeholder="Електронна пошта"
+                inputMode="email"
+                value={emailValue}
+                onChangeText={emailInputHandler}
+                placeholderTextColor={"#BDBDBD"}
+              />
+              <View style={styles.formInputPassContainer}>
+                <TextInput
+                  style={styles.formInput}
+                  placeholder="Пароль"
+                  value={paswordValue}
+                  onChangeText={passwordInputHandler}
+                  secureTextEntry={showPassword}
+                  placeholderTextColor={"#BDBDBD"}
+                />
+                <TouchableOpacity
+                  style={styles.showPass}
+                  onPress={toggleShowPassword}
+                  activeOpacity={0.4}
+                >
+                  <Text style={styles.showPassTitle}>
+                    {showPassword ? "Показати" : "Сховати"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity
+                style={styles.regBtn}
+                activeOpacity={0.5}
+                onPress={onSubmit}
+              >
+                <Text style={styles.regBtnTitle}>Зареєструватись</Text>
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <Text style={styles.linkToLogIn}>Вже є аккаунт? Увійти.</Text>
+            </TouchableOpacity>
+          </View>
         </ImageBackground>
         <StatusBar style="auto" />
       </View>
