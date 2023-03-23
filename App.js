@@ -6,6 +6,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import RegistrationScreen from "./Screens/RegistrationScreen";
 import LogInScreen from "./Screens/LogInScreen";
 import * as Font from "expo-font";
@@ -17,20 +19,16 @@ import * as Font from "expo-font";
 //   });
 // };
 
+const AppStack = createStackNavigator();
+
 export default function App() {
   return (
-    <View style={styles.container}>
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <ImageBackground
-          source={require("./imgs/Photo-BG.png")}
-          style={styles.image}
-        >
-          {/* <LogInScreen /> */}
-          <RegistrationScreen />
-        </ImageBackground>
-      </TouchableWithoutFeedback>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <AppStack.Navigator>
+        <AppStack.Screen name="Registration" component={RegistrationScreen} />
+        {/* <AppStack.Screen name="Login" component={LogInScreen} /> */}
+      </AppStack.Navigator>
+    </NavigationContainer>
   );
 }
 

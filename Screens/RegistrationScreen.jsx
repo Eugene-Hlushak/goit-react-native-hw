@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   Text,
@@ -7,7 +8,9 @@ import {
   TouchableOpacity,
   Image,
   TouchableWithoutFeedback,
+  ImageBackground,
   Keyboard,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -49,73 +52,93 @@ export default function LogInScreen() {
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.registrationScreen}>
-        <View style={styles.addPhotoBox}>
-          <Image
-            style={styles.image}
-            onPress={() => console.log("Plese, add your profile photo")}
-          />
+      <View style={styles.container}>
+        <ImageBackground
+          source={require("../imgs/Photo-BG.png")}
+          style={styles.imageBg}
+        >
+          <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <View style={styles.registrationScreen}>
+              <View style={styles.addPhotoBox}>
+                <Image style={styles.image} />
 
-          <Ionicons
-            style={styles.addPhotoIcon}
-            name="add-circle-outline"
-            size={25}
-            color="#FF6C00"
-            onPress={() => console.log("Plese, add your profile photo")}
-          />
-        </View>
-        <View style={styles.formContainer}>
-          <Text style={styles.title}>Реєстрація</Text>
-          <TextInput
-            style={[styles.formInput, styles.formInputContainer]}
-            placeholder="Логін"
-            inputMode="text"
-            value={loginValue}
-            onChangeText={loginInputHandler}
-            placeholderTextColor={"#BDBDBD"}
-          />
-          <TextInput
-            style={[styles.formInput, styles.formInputContainer]}
-            placeholder="Електронна пошта"
-            inputMode="email"
-            value={emailValue}
-            onChangeText={emailInputHandler}
-            placeholderTextColor={"#BDBDBD"}
-          />
-          <View style={styles.formInputPassContainer}>
-            <TextInput
-              style={styles.formInput}
-              placeholder="Пароль"
-              value={paswordValue}
-              onChangeText={passwordInputHandler}
-              secureTextEntry={showPassword}
-              placeholderTextColor={"#BDBDBD"}
-            />
-            <TouchableOpacity
-              style={styles.showPass}
-              onPress={toggleShowPassword}
-              activeOpacity={0.4}
-            >
-              <Text style={styles.showPassTitle}>
-                {showPassword ? "Показати" : "Сховати"}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            style={styles.regBtn}
-            activeOpacity={0.5}
-            onPress={onSubmit}
-          >
-            <Text style={styles.regBtnTitle}>Зареєструватись</Text>
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.linkToLogIn}>Вже є аккаунт? Увійти.</Text>
+                <TouchableOpacity
+                  style={styles.addPhotoBtn}
+                  onPress={() => Alert.alert("Plese, add your profile photo")}
+                >
+                  <Ionicons
+                    style={styles.addPhotoIcon}
+                    name="add-circle-outline"
+                    size={25}
+                    color="#FF6C00"
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.formContainer}>
+                <Text style={styles.title}>Реєстрація</Text>
+                <TextInput
+                  style={[styles.formInput, styles.formInputContainer]}
+                  placeholder="Логін"
+                  inputMode="text"
+                  value={loginValue}
+                  onChangeText={loginInputHandler}
+                  placeholderTextColor={"#BDBDBD"}
+                />
+                <TextInput
+                  style={[styles.formInput, styles.formInputContainer]}
+                  placeholder="Електронна пошта"
+                  inputMode="email"
+                  value={emailValue}
+                  onChangeText={emailInputHandler}
+                  placeholderTextColor={"#BDBDBD"}
+                />
+                <View style={styles.formInputPassContainer}>
+                  <TextInput
+                    style={styles.formInput}
+                    placeholder="Пароль"
+                    value={paswordValue}
+                    onChangeText={passwordInputHandler}
+                    secureTextEntry={showPassword}
+                    placeholderTextColor={"#BDBDBD"}
+                  />
+                  <TouchableOpacity
+                    style={styles.showPass}
+                    onPress={toggleShowPassword}
+                    activeOpacity={0.4}
+                  >
+                    <Text style={styles.showPassTitle}>
+                      {showPassword ? "Показати" : "Сховати"}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity
+                  style={styles.regBtn}
+                  activeOpacity={0.5}
+                  onPress={onSubmit}
+                >
+                  <Text style={styles.regBtnTitle}>Зареєструватись</Text>
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.linkToLogIn}>Вже є аккаунт? Увійти.</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </ImageBackground>
+        <StatusBar style="auto" />
       </View>
     </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+
+  imageBg: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "flex-end",
+  },
   registrationScreen: {
     position: "relative",
     flex: 0.6,
@@ -138,10 +161,12 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
 
-  addPhotoIcon: {
+  addPhotoBtn: {
     position: "absolute",
     top: 21,
     right: 124,
+    width: 25,
+    height: 25,
   },
 
   formContainer: {
@@ -151,7 +176,8 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     fontSize: 30,
-    fontWeight: 500,
+    fontWeight: "500",
+
     color: "#212121",
     marginBottom: 32,
   },

@@ -39,52 +39,64 @@ export default function RegistrationScreen() {
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.registrationScreen}>
-        <View style={styles.formContainer}>
-          <Text style={styles.title}>Увійти</Text>
-          <TextInput
-            style={[styles.formInput, styles.formInputContainer]}
-            placeholder="Електронна пошта"
-            inputMode="email"
-            value={emailValue}
-            onChangeText={emailInputHandler}
-            placeholderTextColor={"#BDBDBD"}
-          />
-          <View style={styles.formInputPassContainer}>
-            <TextInput
-              style={styles.formInput}
-              placeholder="Пароль"
-              value={paswordValue}
-              onChangeText={passwordInputHandler}
-              secureTextEntry={showPassword}
-              placeholderTextColor={"#BDBDBD"}
-            />
-            <TouchableOpacity
-              style={styles.showPass}
-              onPress={toggleShowPassword}
-              activeOpacity={0.4}
-            >
-              <Text style={styles.showPassTitle}>
-                {showPassword ? "Показати" : "Сховати"}
+      <View style={styles.container}>
+        <ImageBackground
+          source={require("../imgs/Photo-BG.png")}
+          style={styles.imageBg}
+        >
+          <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <View style={styles.loginContainer}>
+              <View style={styles.formContainer}>
+                <Text style={styles.title}>Увійти</Text>
+                <TextInput
+                  style={[styles.formInput, styles.formInputContainer]}
+                  placeholder="Електронна пошта"
+                  inputMode="email"
+                  value={emailValue}
+                  onChangeText={emailInputHandler}
+                  placeholderTextColor={"#BDBDBD"}
+                />
+                <View style={styles.formInputPassContainer}>
+                  <TextInput
+                    style={styles.formInput}
+                    placeholder="Пароль"
+                    value={paswordValue}
+                    onChangeText={passwordInputHandler}
+                    secureTextEntry={showPassword}
+                    placeholderTextColor={"#BDBDBD"}
+                  />
+                  <TouchableOpacity
+                    style={styles.showPass}
+                    onPress={toggleShowPassword}
+                    activeOpacity={0.4}
+                  >
+                    <Text style={styles.showPassTitle}>
+                      {showPassword ? "Показати" : "Сховати"}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity
+                  style={styles.regBtn}
+                  activeOpacity={0.5}
+                  onPress={onSubmit}
+                >
+                  <Text style={styles.regBtnTitle}>Увійти</Text>
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.linkToLogIn}>
+                Немає аккаунту? Зареєструватись.
               </Text>
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            style={styles.regBtn}
-            activeOpacity={0.5}
-            onPress={onSubmit}
-          >
-            <Text style={styles.regBtnTitle}>Увійти</Text>
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.linkToLogIn}>Нема аккаунту? Зареєструватися.</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </ImageBackground>
+        <StatusBar style="auto" />
       </View>
     </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
-  registrationScreen: {
+  loginContainer: {
     position: "relative",
     flex: 0.4,
 
