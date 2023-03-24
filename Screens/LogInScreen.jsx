@@ -77,11 +77,11 @@ export default function RegistrationScreen({ navigation }) {
                 </TouchableOpacity>
               </View>
               <TouchableOpacity
-                style={styles.regBtn}
+                style={styles.loginBtn}
                 activeOpacity={0.5}
                 onPress={onSubmit}
               >
-                <Text style={styles.regBtnTitle}>Увійти</Text>
+                <Text style={styles.loginBtnTitle}>Увійти</Text>
               </TouchableOpacity>
             </View>
             <TouchableOpacity
@@ -125,11 +125,12 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    textAlign: "center",
+    marginBottom: 32,
+    fontFamily: "Comfortaa-Bold",
     fontSize: 30,
+    textAlign: "center",
     fontWeight: "500",
     color: "#212121",
-    marginBottom: 32,
   },
 
   formInput: {
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
     color: "#1B4371",
   },
 
-  regBtn: {
+  loginBtn: {
     height: 51,
     marginBottom: 16,
     backgroundColor: "#FF6C00",
@@ -172,12 +173,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  regBtnTitle: {
+  loginBtnTitle: {
+    fontFamily: "Comfortaa-Bold",
     fontSize: 16,
     color: "#ffffff",
   },
 
   linkToLogIn: {
+    fontFamily: "Comfortaa-Bold",
     textAlign: "center",
     color: "#1B4371",
     fontSize: 16,

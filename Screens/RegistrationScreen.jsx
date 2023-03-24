@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
+
 import {
   StyleSheet,
   Text,
@@ -139,6 +140,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     justifyContent: "flex-end",
   },
+
   registrationScreen: {
     position: "relative",
     flex: 0.6,
@@ -174,12 +176,12 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    textAlign: "center",
-    fontSize: 30,
-    fontWeight: "500",
-
-    color: "#212121",
     marginBottom: 32,
+    fontFamily: "Comfortaa-Bold",
+    fontSize: 30,
+    textAlign: "center",
+    fontWeight: "500",
+    color: "#212121",
   },
 
   formInput: {
@@ -224,11 +226,13 @@ const styles = StyleSheet.create({
   },
 
   regBtnTitle: {
+    fontFamily: "Comfortaa-Bold",
     fontSize: 16,
     color: "#ffffff",
   },
 
   linkToLogIn: {
+    fontFamily: "Comfortaa-Bold",
     textAlign: "center",
     color: "#1B4371",
     fontSize: 16,
