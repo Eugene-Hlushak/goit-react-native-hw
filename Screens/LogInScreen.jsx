@@ -33,6 +33,7 @@ export default function RegistrationScreen({ navigation }) {
      email - ${emailValue},
      password - ${paswordValue}`);
     resetForm();
+    navigation.navigate("PostsScreen", { emailValue });
   };
   const resetForm = () => {
     setEmailValue("");

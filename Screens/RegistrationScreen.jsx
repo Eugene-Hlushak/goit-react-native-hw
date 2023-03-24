@@ -43,6 +43,7 @@ export default function LogInScreen({ navigation }) {
      email - ${emailValue},
      password - ${paswordValue}`);
     resetForm();
+    navigation.navigate("PostsScreen", { loginValue, emailValue });
   };
 
   const resetForm = () => {

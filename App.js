@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import RegistrationScreen from "./Screens/RegistrationScreen";
 import LogInScreen from "./Screens/LogInScreen";
+import PostsScreen from "./Screens/PostsScreen";
 import CreatePostsScreen from "./Screens/CreatePostsScreen";
 
 const AppStack = createStackNavigator();
@@ -18,9 +19,13 @@ export default function App() {
   return (
     <NavigationContainer>
       <AppStack.Navigator>
-        {/* <AppStack.Screen name="Registration" component={RegistrationScreen} />
-        <AppStack.Screen name="Login" component={LogInScreen} /> */}
-        <AppStack.Screen name="Create Post" component={CreatePostsScreen} />
+        <AppStack.Screen name="Registration" component={RegistrationScreen} />
+        <AppStack.Screen name="Login" component={LogInScreen} />
+        <AppStack.Screen name="PostsScreen" component={PostsScreen} />
+        <AppStack.Screen
+          name="CreatePostsScreen"
+          component={CreatePostsScreen}
+        />
       </AppStack.Navigator>
     </NavigationContainer>
   );

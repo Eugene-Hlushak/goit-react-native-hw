@@ -8,40 +8,48 @@ import {
   Alert,
   Text,
 } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import { MaterialIcons, Ionicons, FontAwesome5 } from "@expo/vector-icons";
-
 import { useState } from "react";
 
-export default function CreatePostsScreen() {
+export default function CreatePostsScreen({ navigation }) {
+  const [loadedPhoto, setLoadedPhoto] = useState(null);
   const [postName, setPostName] = useState("");
   const [location, setLocation] = useState("");
   const [isActiveBtn, setIsActiveBtn] = useState(true);
 
+  const addPhoto = () => {
+    setLoadedPhoto("Ocean");
+    enableBtn("Ocean", postName, location);
+  };
+
   const postNameInputHandler = (text) => {
     setPostName(text);
-    enableBtn(text, location);
+    enableBtn(loadedPhoto, text, location);
   };
 
   const locationInputHandler = (text) => {
     setLocation(text);
-    enableBtn(postName, text);
+    enableBtn(loadedPhoto, postName, text);
   };
 
   const onSubmit = () => {
     console.log(`UserData:
+    photo - ${loadedPhoto}
      postName - ${postName},
      location - ${location}`);
-    resetForm();
+    navigation.navigate("PostsScreen", { loadedPhoto, postName, location });
   };
 
   const resetForm = () => {
+    setLoadedPhoto(null);
     setPostName("");
     setLocation("");
     setIsActiveBtn(true);
   };
 
-  const enableBtn = (postName, location) => {
-    if (!postName || !location) {
+  const enableBtn = (loadedPhoto, postName, location) => {
+    if (!loadedPhoto || !postName || !location) {
       setIsActiveBtn(true);
     } else {
       setIsActiveBtn(false);
@@ -50,13 +58,10 @@ export default function CreatePostsScreen() {
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.container}>
+      <View style={styles.mainContainer}>
         <View style={styles.formContainer}>
           <View style={styles.addPhotoContainer}>
-            <TouchableOpacity
-              onPress={() => Alert.alert("You can add photo")}
-              activeOpacity={0.5}
-            >
+            <TouchableOpacity onPress={addPhoto} activeOpacity={0.5}>
               <View style={styles.photo}>
                 <View style={styles.roundContainer}>
                   <MaterialIcons
@@ -79,16 +84,15 @@ export default function CreatePostsScreen() {
             placeholderTextColor={"#BDBDBD"}
           />
           <View style={styles.formInputLocationContainer}>
-            {!location && (
-              <Ionicons
-                name="md-location-outline"
-                size={24}
-                style={styles.locationIcon}
-                color="#BDBDBD"
-              />
-            )}
+            <Ionicons
+              name="md-location-outline"
+              size={24}
+              style={styles.locationIcon}
+              color="#BDBDBD"
+            />
+
             <TextInput
-              style={[styles.formInput, !location && styles.formInputLocation]}
+              style={[styles.formInput, styles.formInputLocation]}
               placeholder="Місцевість..."
               value={location}
               onChangeText={locationInputHandler}
@@ -123,13 +127,14 @@ export default function CreatePostsScreen() {
         >
           <FontAwesome5 name="trash-alt" size={24} color="#BDBDBD" />
         </TouchableOpacity>
+        <StatusBar style="auto" />
       </View>
     </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
     flex: 1,
     paddingTop: 32,
     paddingRight: 16,
@@ -138,6 +143,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: "#FFFFFF",
+    borderTopWidth: 1,
   },
 
   addPhotoContainer: {
