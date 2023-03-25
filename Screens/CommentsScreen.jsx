@@ -1,15 +1,37 @@
 import { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
+import { nanoid } from "nanoid";
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   Image,
+  Keyboard,
   TouchableWithoutFeedback,
+  FlatList,
   TextInput,
 } from "react-native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+
+const CommentsListItem = ({ item }) => {
+  console.log(item);
+  return (
+    <View style={styles.commentContainer}>
+      <Image style={styles.imageBox} />
+      <View
+        style={[
+          styles.commentTextContainer,
+          // ? styles.commentTextContainerOdd
+          // : styles.commentTextContainerEven,
+        ]}
+      >
+        <Text style={{ textAlign: "center" }}>{item.comment}</Text>
+        <Text style={{ textAlign: "right" }}>date</Text>
+      </View>
+    </View>
+  );
+};
 
 export default function PostsScreenEmpty({ navigation, route }) {
   const [comment, setComment] = useState("");
@@ -20,11 +42,13 @@ export default function PostsScreenEmpty({ navigation, route }) {
     console.log(allComments);
   }, [allComments]);
 
-  const commentInputHndler = (text) => setComment(text);
+  const commentInputHndler = (text) => setComment({ comment: text });
+
   const sendComment = () => {
     setAllComments((prev) => [...prev, comment]);
     setComment("");
   };
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.mainContainer}>
@@ -36,7 +60,15 @@ export default function PostsScreenEmpty({ navigation, route }) {
           </View>
         </View>
 
-        <View style={styles.commentsContainer}></View>
+        <View style={styles.commentsContainer}>
+          {allComments.length > 0 && (
+            <FlatList
+              data={allComments}
+              renderItem={CommentsListItem}
+              keyExtractor={() => nanoid()}
+            ></FlatList>
+          )}
+        </View>
 
         <View style={styles.createCommentContainer}>
           <TextInput
@@ -99,7 +131,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 323,
     marginBottom: 31,
-    backgroundColor: "lightgray",
+    // backgroundColor: "lightgray",
   },
 
   commentInput: {
@@ -124,5 +156,38 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF6C00",
   },
 
-  activeBtn: {},
+  commentContainer: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 5,
+    // backgroundColor: "rgba(0, 0, 0, 0.03)",
+  },
+
+  imageBox: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: "yellow",
+  },
+
+  commentTextContainer: {
+    width: "60%",
+    padding: 16,
+    backgroundColor: "tomato",
+    // backgroundColor: "rgba(0, 0, 0, 0.03)",
+  },
+
+  commentTextContainerEven: {
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 6,
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
+  },
+  commentTextContainerOdd: {
+    borderTopLeftRadius: 6,
+    borderTopRightRadius: 0,
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
+  },
 });

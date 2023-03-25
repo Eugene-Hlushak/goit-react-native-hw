@@ -19,8 +19,16 @@ export default function App() {
   return (
     <NavigationContainer>
       <AppStack.Navigator>
-        <AppStack.Screen name="Registration" component={RegistrationScreen} />
-        <AppStack.Screen name="Login" component={LogInScreen} />
+        <AppStack.Screen
+          name="Registration"
+          component={RegistrationScreen}
+          options={{ headerShown: false }}
+        />
+        <AppStack.Screen
+          name="Login"
+          component={LogInScreen}
+          options={{ headerShown: false }}
+        />
         <AppStack.Screen name="PostsScreen" component={PostsScreen} />
         <AppStack.Screen name="CommentsScreen" component={CommentsScreen} />
         <AppStack.Screen

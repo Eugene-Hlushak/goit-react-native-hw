@@ -5,12 +5,12 @@ import {
   TextInput,
   TouchableOpacity,
   Keyboard,
-  Alert,
   Text,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons, Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { useState } from "react";
+import { nanoid } from "nanoid";
 
 export default function CreatePostsScreen({ navigation }) {
   const [loadedPhoto, setLoadedPhoto] = useState(null);
@@ -38,7 +38,12 @@ export default function CreatePostsScreen({ navigation }) {
     photo - ${loadedPhoto}
      postName - ${postName},
      location - ${location}`);
-    navigation.navigate("PostsScreen", { loadedPhoto, postName, location });
+    navigation.navigate("PostsScreen", {
+      id: nanoid(),
+      loadedPhoto,
+      postName,
+      location,
+    });
   };
 
   const resetForm = () => {
