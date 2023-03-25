@@ -5,7 +5,7 @@ import RegistrationScreen from "./Screens/RegistrationScreen";
 import LogInScreen from "./Screens/LogInScreen";
 import PostsScreen from "./Screens/PostsScreen";
 import CreatePostsScreen from "./Screens/CreatePostsScreen";
-
+import CommentsScreen from "./Screens/CommentsScreen";
 const AppStack = createStackNavigator();
 
 export default function App() {
@@ -22,6 +22,7 @@ export default function App() {
         <AppStack.Screen name="Registration" component={RegistrationScreen} />
         <AppStack.Screen name="Login" component={LogInScreen} />
         <AppStack.Screen name="PostsScreen" component={PostsScreen} />
+        <AppStack.Screen name="CommentsScreen" component={CommentsScreen} />
         <AppStack.Screen
           name="CreatePostsScreen"
           component={CreatePostsScreen}

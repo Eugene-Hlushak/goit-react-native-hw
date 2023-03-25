@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   },
 
   addPhotoContainer: {
-    paddingBottom: 32,
+    marginBottom: 32,
   },
 
   photo: {

@@ -8,7 +8,7 @@ import {
   Image,
   Alert,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, EvilIcons } from "@expo/vector-icons";
 
 export default function PostsScreenEmpty({ navigation, route }) {
   const [posts, setPosts] = useState([]);
@@ -16,21 +16,14 @@ export default function PostsScreenEmpty({ navigation, route }) {
     route.params;
 
   useEffect(() => {
-    // console.log(route.params);
-    // console.log("Рендер після входу в аккаунт");
-    // setPosts((prev) => [...prev, { loadedPhoto, postName, location }]);
-  }, []);
-
-  useEffect(() => {
     if (!loadedPhoto || !postName || !location) return;
     console.log(
-      "Рендер після створення посту",
+      "Рендер після створення посту - введені дані",
       loadedPhoto,
       postName,
       location
     );
     setPosts((prev) => [...prev, { loadedPhoto, postName, location }]);
-    // setPosts([{ loadedPhoto, postName, location }]);
   }, [route.params]);
   console.log(posts);
   return (
@@ -44,7 +37,41 @@ export default function PostsScreenEmpty({ navigation, route }) {
           </Text>
         </View>
       </TouchableOpacity>
-      <View>{}</View>
+
+      <TouchableOpacity onPress={() => navigation.navigate("CommentsScreen")}>
+        <View style={styles.postContainer}>
+          <View
+            style={{
+              width: "100%",
+              height: 100,
+              marginBottom: 8,
+              backgroundColor: "gray",
+              borderRadius: 20,
+            }}
+          ></View>
+          <Text
+            style={{
+              fontWeight: "500",
+              fontSize: 16,
+              lineHeight: 19,
+              color: "#212121",
+            }}
+          >
+            Here is your new post with name - {postName}
+          </Text>
+          <View
+            style={{
+              height: 16,
+
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <EvilIcons name="comment" size={17} color="black" />
+            <Text>You was here - {location}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
 
       <View style={styles.btnsContainer}>
         <TouchableOpacity style={styles.button}>
