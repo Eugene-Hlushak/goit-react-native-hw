@@ -19,7 +19,6 @@ export default function CreatePostsScreen({ navigation }) {
   const [loadedPhoto, setLoadedPhoto] = useState(null);
   const [postName, setPostName] = useState("");
   const [locationName, setLocationName] = useState("");
-  const [location, setLocation] = useState(null);
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [isDisabledBtn, setIsDisabledBtn] = useState(true);
   const [hasPermission, setHasPermission] = useState(null);
@@ -40,16 +39,7 @@ export default function CreatePostsScreen({ navigation }) {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        console.log("Permission to access location was denied");
       }
-
-      let location = await Location.getCurrentPositionAsync({});
-      console.log(location);
-      const coords = {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      };
-      setLocation(coords);
     })();
   }, []);
 
@@ -61,8 +51,9 @@ export default function CreatePostsScreen({ navigation }) {
     if (cameraRef) {
       const { uri } = await cameraRef.takePictureAsync();
       await MediaLibrary.createAssetAsync(uri);
-      setLoadedPhoto(uri);
+
       setIsCameraActive(false);
+      setLoadedPhoto(uri);
     }
   };
 
@@ -77,16 +68,18 @@ export default function CreatePostsScreen({ navigation }) {
   };
 
   const onSubmit = async () => {
-    console.log(`UserData:
- loadedPhoto - ${loadedPhoto}
-     postName - ${postName},
-     locationName - ${locationName},
-     location - ${location}`);
+    let placeLocation = await Location.getCurrentPositionAsync({});
+
+    const coords = {
+      latitude: placeLocation.coords.latitude,
+      longitude: placeLocation.coords.longitude,
+    };
+
     navigation.navigate("PostsScreen", {
       loadedPhoto,
       postName,
       locationName,
-      location,
+      coords,
     });
   };
 
@@ -94,7 +87,6 @@ export default function CreatePostsScreen({ navigation }) {
     setLoadedPhoto(null);
     setPostName("");
     setLocationName("");
-    setLocation(null);
 
     setIsDisabledBtn(true);
   };
@@ -141,7 +133,9 @@ export default function CreatePostsScreen({ navigation }) {
               <TouchableOpacity onPress={addPhoto} activeOpacity={0.5}>
                 <Camera
                   style={styles.photo}
-                  onCameraReady={() => {}}
+                  onCameraReady={() => {
+                    console.log("get your photo");
+                  }}
                   type={type}
                   ref={(ref) => {
                     setCameraRef(ref);
@@ -169,6 +163,7 @@ export default function CreatePostsScreen({ navigation }) {
             onChangeText={postNameInputHandler}
             placeholderTextColor={"#BDBDBD"}
           />
+
           <View style={styles.formInputLocationContainer}>
             <Ionicons
               name="md-location-outline"
@@ -180,7 +175,7 @@ export default function CreatePostsScreen({ navigation }) {
             <TextInput
               style={[styles.formInput, styles.formInputLocation]}
               placeholder="Місцевість..."
-              value={location}
+              value={locationName}
               onChangeText={locationNameInputHandler}
               placeholderTextColor={"#BDBDBD"}
             />

@@ -11,15 +11,15 @@ export default function PostsScreenEmpty({ navigation, route }) {
     loadedPhoto,
     postName,
     locationName,
-    location,
+    coords,
   } = route.params;
 
   useEffect(() => {
+    if (!loadedPhoto && !postName && !locationName && !coords) return;
     setPosts((prev) => [
       ...prev,
-      { loadedPhoto, postName, locationName, location },
+      { loadedPhoto, postName, locationName, location: coords },
     ]);
-    console.log(posts);
   }, [route.params]);
 
   return (
@@ -46,35 +46,77 @@ export default function PostsScreenEmpty({ navigation, route }) {
                   uri: loadedPhoto,
                 }}
               />
-
-              <Text style={styles.postName}>{postName}</Text>
-              <View style={styles.postLocation}>
-                <EvilIcons name="comment" size={17} color="black" />
-                <Text>{locationName}</Text>
-              </View>
             </TouchableOpacity>
+            <Text style={styles.postName}>{postName}</Text>
+            <View style={styles.postLocation}>
+              <EvilIcons
+                name="comment"
+                size={20}
+                color="#BDBDBD"
+                style={{ marginRight: 6 }}
+              />
+              <Text style={{ color: "#BDBDBD", fontSize: 16 }}>0</Text>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("MapScreen", { coords })}
+                style={{
+                  marginLeft: "auto",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Ionicons
+                  name="md-location-outline"
+                  size={20}
+                  style={styles.locationIcon}
+                  color="#BDBDBD"
+                />
+                <Text style={{ textDecorationLine: "underline" }}>
+                  {locationName}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
-          <View style={styles.postItem}>
+          {/* <View style={styles.postItem}>
             <TouchableOpacity
               onPress={() => navigation.navigate("CommentsScreen")}
             >
-              <View>
-                <Image
-                  style={styles.postPhoto}
-                  source={{
-                    uri: loadedPhoto,
-                  }}
-                />
-              </View>
-
-              <Text style={styles.postName}>{postName}</Text>
-              <View style={styles.postLocation}>
-                <EvilIcons name="comment" size={17} color="black" />
-                <Text>{locationName}</Text>
-              </View>
+              <Image
+                style={styles.postPhoto}
+                source={{
+                  uri: loadedPhoto,
+                }}
+              />
             </TouchableOpacity>
-          </View>
+            <Text style={styles.postName}>{postName}</Text>
+            <View style={styles.postLocation}>
+              <EvilIcons
+                name="comment"
+                size={20}
+                color="#BDBDBD"
+                style={{ marginRight: 6 }}
+              />
+              <Text style={{ color: "#BDBDBD", fontSize: 16 }}>0</Text>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("MapScreen", { posts })}
+                style={{
+                  marginLeft: "auto",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Ionicons
+                  name="md-location-outline"
+                  size={20}
+                  style={styles.locationIcon}
+                  color="#BDBDBD"
+                />
+                <Text style={{ textDecorationLine: "underline" }}>
+                  {locationName}
+                </Text>
+              </TouchableOpacity>
+            </View> */}
+          {/* </View> */}
         </View>
       )}
 
@@ -175,7 +217,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#212121",
     flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: "center",
   },
 
   btnsContainer: {

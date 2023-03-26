@@ -6,9 +6,10 @@ import LogInScreen from "./Screens/AuthorizationScreen/LogInScreen";
 import PostsScreen from "./Screens/MainScreen/PostsScreen";
 import CreatePostsScreen from "./Screens/MainScreen/CreatePostsScreen";
 import CommentsScreen from "./Screens/MainScreen/CommentsScreen";
-const AppStack = createStackNavigator();
-
+import MapScreen from "./Screens/MainScreen/MapScreen";
 import Home from "./Screens/TestScreen";
+
+const AppStack = createStackNavigator();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -38,6 +39,7 @@ export default function App() {
           name="CreatePostsScreen"
           component={CreatePostsScreen}
         />
+        <AppStack.Screen name="MapScreen" component={MapScreen} />
       </AppStack.Navigator>
     </NavigationContainer>
   );
