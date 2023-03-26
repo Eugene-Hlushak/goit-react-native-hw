@@ -1,31 +1,27 @@
 import { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Alert,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { Ionicons, EvilIcons } from "@expo/vector-icons";
 
 export default function PostsScreenEmpty({ navigation, route }) {
   const [posts, setPosts] = useState([]);
-  const { emailValue, loginValue, loadedPhoto, postName, location } =
-    route.params;
+  const {
+    emailValue,
+    loginValue,
+    loadedPhoto,
+    postName,
+    locationName,
+    location,
+  } = route.params;
 
   useEffect(() => {
-    if (!loadedPhoto || !postName || !location) return;
-    console.log(
-      "Рендер після створення посту - введені дані",
-      loadedPhoto,
-      postName,
-      location
-    );
-    setPosts((prev) => [...prev, { loadedPhoto, postName, location }]);
+    setPosts((prev) => [
+      ...prev,
+      { loadedPhoto, postName, locationName, location },
+    ]);
+    console.log(posts);
   }, [route.params]);
-  console.log(posts);
+
   return (
     <View style={styles.mainContainer}>
       <TouchableOpacity style={styles.userContainer}>
@@ -38,40 +34,49 @@ export default function PostsScreenEmpty({ navigation, route }) {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate("CommentsScreen")}>
-        <View style={styles.postContainer}>
-          <View
-            style={{
-              width: "100%",
-              height: 100,
-              marginBottom: 8,
-              backgroundColor: "gray",
-              borderRadius: 20,
-            }}
-          ></View>
-          <Text
-            style={{
-              fontWeight: "500",
-              fontSize: 16,
-              lineHeight: 19,
-              color: "#212121",
-            }}
-          >
-            Here is your new post with name - {postName}
-          </Text>
-          <View
-            style={{
-              height: 16,
+      {posts.length > 0 && (
+        <View style={styles.postListContainer}>
+          <View style={styles.postItem}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("CommentsScreen")}
+            >
+              <Image
+                style={styles.postPhoto}
+                source={{
+                  uri: loadedPhoto,
+                }}
+              />
 
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            <EvilIcons name="comment" size={17} color="black" />
-            <Text>You was here - {location}</Text>
+              <Text style={styles.postName}>{postName}</Text>
+              <View style={styles.postLocation}>
+                <EvilIcons name="comment" size={17} color="black" />
+                <Text>{locationName}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.postItem}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("CommentsScreen")}
+            >
+              <View>
+                <Image
+                  style={styles.postPhoto}
+                  source={{
+                    uri: loadedPhoto,
+                  }}
+                />
+              </View>
+
+              <Text style={styles.postName}>{postName}</Text>
+              <View style={styles.postLocation}>
+                <EvilIcons name="comment" size={17} color="black" />
+                <Text>{locationName}</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
-      </TouchableOpacity>
+      )}
 
       <View style={styles.btnsContainer}>
         <TouchableOpacity style={styles.button}>
@@ -107,12 +112,12 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     paddingBottom: 22,
-    justifyContent: "space-between",
     backgroundColor: "#FFFFFF",
     borderTopWidth: 1,
   },
 
   userContainer: {
+    marginBottom: 32,
     flexDirection: "row",
     alignItems: "center",
     width: "55%",
@@ -133,14 +138,49 @@ const styles = StyleSheet.create({
     lineHeight: 15,
     color: "#212121",
   },
+
   userEmail: {
     fontSize: 11,
     lineHeight: 13,
     color: "rgba(33, 33, 33, 0.8)",
   },
 
+  postListContainer: {
+    // backgroundColor: "yellow",
+  },
+
+  postItem: {
+    width: "100%",
+
+    marginBottom: 32,
+    borderRadius: 20,
+  },
+
+  postPhoto: {
+    width: "100%",
+    height: 240,
+    marginBottom: 8,
+    borderRadius: 20,
+  },
+
+  postName: {
+    marginBottom: 8,
+    fontWeight: "500",
+    fontSize: 16,
+
+    color: "#212121",
+  },
+
+  postLocation: {
+    fontSize: 16,
+    color: "#212121",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
   btnsContainer: {
     height: 80,
+    marginTop: "auto",
     paddingTop: 8,
     flexDirection: "row",
     justifyContent: "space-around",

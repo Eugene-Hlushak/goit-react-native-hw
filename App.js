@@ -3,9 +3,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import RegistrationScreen from "./Screens/AuthorizationScreen/RegistrationScreen";
 import LogInScreen from "./Screens/AuthorizationScreen/LogInScreen";
-import PostsScreen from "./Screens/PostsScreen";
-import CreatePostsScreen from "./Screens/CreatePostsScreen";
-import CommentsScreen from "./Screens/CommentsScreen";
+import PostsScreen from "./Screens/MainScreen/PostsScreen";
+import CreatePostsScreen from "./Screens/MainScreen/CreatePostsScreen";
+import CommentsScreen from "./Screens/MainScreen/CommentsScreen";
 const AppStack = createStackNavigator();
 
 import Home from "./Screens/TestScreen";

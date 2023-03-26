@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   Image,
@@ -10,35 +12,47 @@ import {
 } from "react-native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
-import { StatusBar } from "expo-status-bar";
+import * as Location from "expo-location";
 import { MaterialIcons, Ionicons, FontAwesome5 } from "@expo/vector-icons";
-import { useState, useEffect } from "react";
 
 export default function CreatePostsScreen({ navigation }) {
   const [loadedPhoto, setLoadedPhoto] = useState(null);
   const [postName, setPostName] = useState("");
-  const [location, setLocation] = useState("");
+  const [locationName, setLocationName] = useState("");
+  const [location, setLocation] = useState(null);
   const [isCameraActive, setIsCameraActive] = useState(false);
-  const [isActiveBtn, setIsActiveBtn] = useState(true);
+  const [isDisabledBtn, setIsDisabledBtn] = useState(true);
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
 
   useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-
-      setHasPermission(status === "granted");
-    })();
+    if (hasPermission === null) {
+      async () => {
+        const { status } = await Camera.requestCameraPermissionsAsync();
+        setHasPermission(status === "granted");
+        console.log(hasPermission);
+      };
+    }
   }, []);
 
   useEffect(() => {
-    console.log("empty useEffect, only with dependency of loaded photo");
-    console.log(loadedPhoto);
-  }, [loadedPhoto]);
-  if (hasPermission === null) {
-    return <View />;
-  }
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      console.log(location);
+      const coords = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      };
+      setLocation(coords);
+    })();
+  }, []);
+
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
@@ -54,21 +68,24 @@ export default function CreatePostsScreen({ navigation }) {
 
   const postNameInputHandler = (text) => {
     setPostName(text);
-    enableBtn(text, location);
+    enableBtn(text, locationName);
   };
 
-  const locationInputHandler = (text) => {
-    setLocation(text);
+  const locationNameInputHandler = (text) => {
+    setLocationName(text);
     enableBtn(postName, text);
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     console.log(`UserData:
- 
+ loadedPhoto - ${loadedPhoto}
      postName - ${postName},
+     locationName - ${locationName},
      location - ${location}`);
     navigation.navigate("PostsScreen", {
+      loadedPhoto,
       postName,
+      locationName,
       location,
     });
   };
@@ -76,15 +93,17 @@ export default function CreatePostsScreen({ navigation }) {
   const resetForm = () => {
     setLoadedPhoto(null);
     setPostName("");
-    setLocation("");
-    setIsActiveBtn(true);
+    setLocationName("");
+    setLocation(null);
+
+    setIsDisabledBtn(true);
   };
 
-  const enableBtn = (postName, location) => {
-    if (!postName || !location) {
-      setIsActiveBtn(true);
+  const enableBtn = (postName, locationName) => {
+    if (!postName || !locationName) {
+      setIsDisabledBtn(true);
     } else {
-      setIsActiveBtn(false);
+      setIsDisabledBtn(false);
     }
   };
 
@@ -107,20 +126,22 @@ export default function CreatePostsScreen({ navigation }) {
                     ]}
                   />
                 ) : (
-                  <View style={styles.photo}></View>
+                  <View style={[styles.photo, styles.noPhoto]}>
+                    <View style={styles.roundContainer}>
+                      <MaterialIcons
+                        name="photo-camera"
+                        size={24}
+                        color="#BDBDBD"
+                      />
+                    </View>
+                  </View>
                 )}
-                <View style={styles.roundContainer}>
-                  <MaterialIcons
-                    name="photo-camera"
-                    size={24}
-                    color="#BDBDBD"
-                  />
-                </View>
               </TouchableOpacity>
             ) : (
               <TouchableOpacity onPress={addPhoto} activeOpacity={0.5}>
                 <Camera
                   style={styles.photo}
+                  onCameraReady={() => {}}
                   type={type}
                   ref={(ref) => {
                     setCameraRef(ref);
@@ -160,16 +181,16 @@ export default function CreatePostsScreen({ navigation }) {
               style={[styles.formInput, styles.formInputLocation]}
               placeholder="Місцевість..."
               value={location}
-              onChangeText={locationInputHandler}
+              onChangeText={locationNameInputHandler}
               placeholderTextColor={"#BDBDBD"}
             />
           </View>
 
           <TouchableOpacity
-            disabled={isActiveBtn}
+            disabled={isDisabledBtn}
             style={[
               styles.createPostBtn,
-              isActiveBtn ? styles.btnDisabled : styles.btnEnabled,
+              isDisabledBtn ? styles.btnDisabled : styles.btnEnabled,
             ]}
             activeOpacity={0.5}
             onPress={onSubmit}
@@ -177,7 +198,7 @@ export default function CreatePostsScreen({ navigation }) {
             <Text
               style={[
                 styles.createPostBtnTitle,
-                isActiveBtn ? styles.disabledTitle : styles.enabledTitle,
+                isDisabledBtn ? styles.disabledTitle : styles.enabledTitle,
               ]}
             >
               Створити публікацію
