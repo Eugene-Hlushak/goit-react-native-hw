@@ -1,29 +1,20 @@
 import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
-
 import {
   StyleSheet,
   Text,
   TextInput,
   View,
   TouchableOpacity,
-  Image,
   TouchableWithoutFeedback,
   ImageBackground,
   Keyboard,
-  Alert,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 
-export default function LogInScreen({ navigation }) {
-  const [loginValue, setLoginValue] = useState("");
+export default function RegistrationScreen({ navigation }) {
   const [emailValue, setEmailValue] = useState("");
   const [paswordValue, setPaswordValue] = useState("");
   const [showPassword, setShowPassword] = useState(true);
-
-  const loginInputHandler = (text) => {
-    setLoginValue(text);
-  };
 
   const emailInputHandler = (text) => {
     setEmailValue(text);
@@ -39,16 +30,13 @@ export default function LogInScreen({ navigation }) {
 
   const onSubmit = () => {
     console.log(`UserData:
-    login - ${loginValue},
      email - ${emailValue},
      password - ${paswordValue}`);
     resetForm();
-    navigation.navigate("PostsScreen", { loginValue, emailValue });
+    navigation.navigate("PostsScreen", { emailValue });
   };
-
   const resetForm = () => {
     setEmailValue("");
-    setLoginValue("");
     setPaswordValue("");
   };
 
@@ -56,35 +44,12 @@ export default function LogInScreen({ navigation }) {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <ImageBackground
-          source={require("../imgs/Photo-BG.png")}
+          source={require("../../imgs/Photo-BG.png")}
           style={styles.imageBg}
         >
-          <View style={styles.registrationScreen}>
-            <View style={styles.addPhotoBox}>
-              <Image style={styles.image} />
-
-              <TouchableOpacity
-                style={styles.addPhotoBtn}
-                onPress={() => Alert.alert("Plese, add your profile photo")}
-              >
-                <Ionicons
-                  style={styles.addPhotoIcon}
-                  name="add-circle-outline"
-                  size={25}
-                  color="#FF6C00"
-                />
-              </TouchableOpacity>
-            </View>
+          <View style={styles.loginContainer}>
             <View style={styles.formContainer}>
-              <Text style={styles.title}>Реєстрація</Text>
-              <TextInput
-                style={[styles.formInput, styles.formInputContainer]}
-                placeholder="Логін"
-                inputMode="text"
-                value={loginValue}
-                onChangeText={loginInputHandler}
-                placeholderTextColor={"#BDBDBD"}
-              />
+              <Text style={styles.title}>Увійти</Text>
               <TextInput
                 style={[styles.formInput, styles.formInputContainer]}
                 placeholder="Електронна пошта"
@@ -113,15 +78,19 @@ export default function LogInScreen({ navigation }) {
                 </TouchableOpacity>
               </View>
               <TouchableOpacity
-                style={styles.regBtn}
+                style={styles.loginBtn}
                 activeOpacity={0.5}
                 onPress={onSubmit}
               >
-                <Text style={styles.regBtnTitle}>Зареєструватись</Text>
+                <Text style={styles.loginBtnTitle}>Увійти</Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-              <Text style={styles.linkToLogIn}>Вже є аккаунт? Увійти.</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Registration")}
+            >
+              <Text style={styles.linkToLogIn}>
+                Немає аккаунту? Зареєструватись.
+              </Text>
             </TouchableOpacity>
           </View>
         </ImageBackground>
@@ -142,38 +111,18 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
 
-  registrationScreen: {
+  loginContainer: {
     position: "relative",
-    flex: 0.6,
+    flex: 0.5,
+
     paddingHorizontal: 16,
     backgroundColor: "#fff",
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
   },
 
-  addPhotoBox: {
-    alignItems: "center",
-  },
-
-  image: {
-    position: "absolute",
-    top: -60,
-    width: 120,
-    height: 120,
-    backgroundColor: "#F6F6F6",
-    borderRadius: 16,
-  },
-
-  addPhotoBtn: {
-    position: "absolute",
-    top: 21,
-    right: 124,
-    width: 25,
-    height: 25,
-  },
-
   formContainer: {
-    paddingTop: 92,
+    paddingTop: 32,
   },
 
   title: {
@@ -202,7 +151,6 @@ const styles = StyleSheet.create({
   },
 
   formInputPassContainer: {
-    position: "relative",
     marginBottom: 43,
   },
 
@@ -217,7 +165,7 @@ const styles = StyleSheet.create({
     color: "#1B4371",
   },
 
-  regBtn: {
+  loginBtn: {
     height: 51,
     marginBottom: 16,
     backgroundColor: "#FF6C00",
@@ -226,7 +174,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  regBtnTitle: {
+  loginBtnTitle: {
     fontFamily: "Comfortaa-Bold",
     fontSize: 16,
     color: "#ffffff",

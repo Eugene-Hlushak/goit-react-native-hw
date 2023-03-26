@@ -1,5 +1,6 @@
 import {
   StyleSheet,
+  Image,
   View,
   TouchableWithoutFeedback,
   TextInput,
@@ -7,40 +8,66 @@ import {
   Keyboard,
   Text,
 } from "react-native";
+import { Camera } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons, Ionicons, FontAwesome5 } from "@expo/vector-icons";
-import { useState } from "react";
-import { nanoid } from "nanoid";
+import { useState, useEffect } from "react";
 
 export default function CreatePostsScreen({ navigation }) {
   const [loadedPhoto, setLoadedPhoto] = useState(null);
   const [postName, setPostName] = useState("");
   const [location, setLocation] = useState("");
+  const [isCameraActive, setIsCameraActive] = useState(false);
   const [isActiveBtn, setIsActiveBtn] = useState(true);
+  const [hasPermission, setHasPermission] = useState(null);
+  const [cameraRef, setCameraRef] = useState(null);
+  const [type, setType] = useState(Camera.Constants.Type.back);
 
-  const addPhoto = () => {
-    setLoadedPhoto("Ocean");
-    enableBtn("Ocean", postName, location);
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+
+      setHasPermission(status === "granted");
+    })();
+  }, []);
+
+  useEffect(() => {
+    console.log("empty useEffect, only with dependency of loaded photo");
+    console.log(loadedPhoto);
+  }, [loadedPhoto]);
+  if (hasPermission === null) {
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
+
+  const addPhoto = async () => {
+    if (cameraRef) {
+      const { uri } = await cameraRef.takePictureAsync();
+      await MediaLibrary.createAssetAsync(uri);
+      setLoadedPhoto(uri);
+      setIsCameraActive(false);
+    }
   };
 
   const postNameInputHandler = (text) => {
     setPostName(text);
-    enableBtn(loadedPhoto, text, location);
+    enableBtn(text, location);
   };
 
   const locationInputHandler = (text) => {
     setLocation(text);
-    enableBtn(loadedPhoto, postName, text);
+    enableBtn(postName, text);
   };
 
   const onSubmit = () => {
     console.log(`UserData:
-    photo - ${loadedPhoto}
+ 
      postName - ${postName},
      location - ${location}`);
     navigation.navigate("PostsScreen", {
-      id: nanoid(),
-      loadedPhoto,
       postName,
       location,
     });
@@ -53,8 +80,8 @@ export default function CreatePostsScreen({ navigation }) {
     setIsActiveBtn(true);
   };
 
-  const enableBtn = (loadedPhoto, postName, location) => {
-    if (!loadedPhoto || !postName || !location) {
+  const enableBtn = (postName, location) => {
+    if (!postName || !location) {
       setIsActiveBtn(true);
     } else {
       setIsActiveBtn(false);
@@ -66,8 +93,22 @@ export default function CreatePostsScreen({ navigation }) {
       <View style={styles.mainContainer}>
         <View style={styles.formContainer}>
           <View style={styles.addPhotoContainer}>
-            <TouchableOpacity onPress={addPhoto} activeOpacity={0.5}>
-              <View style={styles.photo}>
+            {!isCameraActive ? (
+              <TouchableOpacity
+                onPress={() => setIsCameraActive(true)}
+                activeOpacity={0.5}
+              >
+                {loadedPhoto ? (
+                  <Image
+                    source={{ uri: loadedPhoto }}
+                    style={[
+                      styles.photo,
+                      loadedPhoto ? styles.withPhoto : noPhoto,
+                    ]}
+                  />
+                ) : (
+                  <View style={styles.photo}></View>
+                )}
                 <View style={styles.roundContainer}>
                   <MaterialIcons
                     name="photo-camera"
@@ -75,8 +116,27 @@ export default function CreatePostsScreen({ navigation }) {
                     color="#BDBDBD"
                   />
                 </View>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={addPhoto} activeOpacity={0.5}>
+                <Camera
+                  style={styles.photo}
+                  type={type}
+                  ref={(ref) => {
+                    setCameraRef(ref);
+                  }}
+                >
+                  <View style={styles.roundContainer}>
+                    <MaterialIcons
+                      name="photo-camera"
+                      size={24}
+                      color="#BDBDBD"
+                    />
+                  </View>
+                </Camera>
+              </TouchableOpacity>
+            )}
+
             <Text style={styles.tipp}>Завантажте фото</Text>
           </View>
 
@@ -164,8 +224,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     borderColor: "#E8E8E8",
-    backgroundColor: "#F6F6F6",
   },
+
+  noPhoto: { backgroundColor: "#F6F6F6" },
+  withPhoto: { backgroundColor: "transparent" },
 
   roundContainer: {
     alignItems: "center",

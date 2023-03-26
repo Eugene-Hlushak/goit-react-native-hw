@@ -1,20 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
+import { Camera } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
+
 import {
   StyleSheet,
   Text,
   TextInput,
   View,
   TouchableOpacity,
+  Image,
   TouchableWithoutFeedback,
   ImageBackground,
   Keyboard,
+  Alert,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-export default function RegistrationScreen({ navigation }) {
+export default function LogInScreen({ navigation }) {
+  const [loginValue, setLoginValue] = useState("");
   const [emailValue, setEmailValue] = useState("");
   const [paswordValue, setPaswordValue] = useState("");
   const [showPassword, setShowPassword] = useState(true);
+  // const [hasPermission, setHasPermission] = useState(null);
+  // const [cameraRef, setCameraRef] = useState(null);
+  // const [type, setType] = useState(Camera.Constants.Type.back);
+
+  useEffect(() => {
+    async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      await MediaLibrary.requestPermissionsAsync();
+
+      setHasPermission(status === "granted");
+    };
+  });
+
+  const loginInputHandler = (text) => {
+    setLoginValue(text);
+  };
 
   const emailInputHandler = (text) => {
     setEmailValue(text);
@@ -28,15 +51,20 @@ export default function RegistrationScreen({ navigation }) {
     setShowPassword(!showPassword);
   };
 
+  const AddPhoto = () => {};
+
   const onSubmit = () => {
     console.log(`UserData:
+    login - ${loginValue},
      email - ${emailValue},
      password - ${paswordValue}`);
     resetForm();
-    navigation.navigate("PostsScreen", { emailValue });
+    navigation.navigate("PostsScreen", { loginValue, emailValue });
   };
+
   const resetForm = () => {
     setEmailValue("");
+    setLoginValue("");
     setPaswordValue("");
   };
 
@@ -44,12 +72,32 @@ export default function RegistrationScreen({ navigation }) {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <ImageBackground
-          source={require("../imgs/Photo-BG.png")}
+          source={require("../../imgs/Photo-BG.png")}
           style={styles.imageBg}
         >
-          <View style={styles.loginContainer}>
+          <View style={styles.registrationScreen}>
+            <View style={styles.addPhotoBox}>
+              <Image style={styles.image} />
+
+              <TouchableOpacity style={styles.addPhotoBtn} onPress={AddPhoto}>
+                <Ionicons
+                  style={styles.addPhotoIcon}
+                  name="add-circle-outline"
+                  size={25}
+                  color="#FF6C00"
+                />
+              </TouchableOpacity>
+            </View>
             <View style={styles.formContainer}>
-              <Text style={styles.title}>Увійти</Text>
+              <Text style={styles.title}>Реєстрація</Text>
+              <TextInput
+                style={[styles.formInput, styles.formInputContainer]}
+                placeholder="Логін"
+                inputMode="text"
+                value={loginValue}
+                onChangeText={loginInputHandler}
+                placeholderTextColor={"#BDBDBD"}
+              />
               <TextInput
                 style={[styles.formInput, styles.formInputContainer]}
                 placeholder="Електронна пошта"
@@ -78,19 +126,15 @@ export default function RegistrationScreen({ navigation }) {
                 </TouchableOpacity>
               </View>
               <TouchableOpacity
-                style={styles.loginBtn}
+                style={styles.regBtn}
                 activeOpacity={0.5}
                 onPress={onSubmit}
               >
-                <Text style={styles.loginBtnTitle}>Увійти</Text>
+                <Text style={styles.regBtnTitle}>Зареєструватись</Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Registration")}
-            >
-              <Text style={styles.linkToLogIn}>
-                Немає аккаунту? Зареєструватись.
-              </Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <Text style={styles.linkToLogIn}>Вже є аккаунт? Увійти.</Text>
             </TouchableOpacity>
           </View>
         </ImageBackground>
@@ -111,18 +155,38 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
 
-  loginContainer: {
+  registrationScreen: {
     position: "relative",
-    flex: 0.5,
-
+    flex: 0.6,
     paddingHorizontal: 16,
     backgroundColor: "#fff",
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
   },
 
+  addPhotoBox: {
+    alignItems: "center",
+  },
+
+  image: {
+    position: "absolute",
+    top: -60,
+    width: 120,
+    height: 120,
+    backgroundColor: "#F6F6F6",
+    borderRadius: 16,
+  },
+
+  addPhotoBtn: {
+    position: "absolute",
+    top: 21,
+    right: 124,
+    width: 25,
+    height: 25,
+  },
+
   formContainer: {
-    paddingTop: 32,
+    paddingTop: 92,
   },
 
   title: {
@@ -151,6 +215,7 @@ const styles = StyleSheet.create({
   },
 
   formInputPassContainer: {
+    position: "relative",
     marginBottom: 43,
   },
 
@@ -165,7 +230,7 @@ const styles = StyleSheet.create({
     color: "#1B4371",
   },
 
-  loginBtn: {
+  regBtn: {
     height: 51,
     marginBottom: 16,
     backgroundColor: "#FF6C00",
@@ -174,7 +239,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  loginBtnTitle: {
+  regBtnTitle: {
     fontFamily: "Comfortaa-Bold",
     fontSize: 16,
     color: "#ffffff",

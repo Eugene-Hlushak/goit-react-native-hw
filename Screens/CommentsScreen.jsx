@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { nanoid } from "nanoid";
+// import { nanoid } from "nanoid";
 import {
   StyleSheet,
   Text,
@@ -65,7 +65,7 @@ export default function PostsScreenEmpty({ navigation, route }) {
             <FlatList
               data={allComments}
               renderItem={CommentsListItem}
-              keyExtractor={() => nanoid()}
+              //   keyExtractor={() => nanoid()}
             ></FlatList>
           )}
         </View>
