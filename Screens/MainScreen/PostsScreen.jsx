@@ -38,7 +38,9 @@ export default function PostsScreenEmpty({ navigation, route }) {
         <View style={styles.postListContainer}>
           <View style={styles.postItem}>
             <TouchableOpacity
-              onPress={() => navigation.navigate("CommentsScreen")}
+              onPress={() =>
+                navigation.navigate("CommentsScreen", { loadedPhoto })
+              }
             >
               <Image
                 style={styles.postPhoto}

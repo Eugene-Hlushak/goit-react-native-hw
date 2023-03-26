@@ -18,7 +18,7 @@ const CommentsListItem = ({ item }) => {
   console.log(item);
   return (
     <View style={styles.commentContainer}>
-      <Image style={styles.imageBox} />
+      <Image style={styles.userImageBox} />
       <View
         style={[
           styles.commentTextContainer,
@@ -26,7 +26,7 @@ const CommentsListItem = ({ item }) => {
           // : styles.commentTextContainerEven,
         ]}
       >
-        <Text style={{ textAlign: "center" }}>{item.comment}</Text>
+        <Text style={{ textAlign: "left" }}>{item.comment}</Text>
         <Text style={{ textAlign: "right" }}>date</Text>
       </View>
     </View>
@@ -34,6 +34,7 @@ const CommentsListItem = ({ item }) => {
 };
 
 export default function PostsScreenEmpty({ navigation, route }) {
+  const { loadedPhoto } = route.params;
   const [comment, setComment] = useState("");
   const [allComments, setAllComments] = useState([]);
 
@@ -42,10 +43,11 @@ export default function PostsScreenEmpty({ navigation, route }) {
     console.log(allComments);
   }, [allComments]);
 
-  const commentInputHndler = (text) => setComment({ comment: text });
+  const commentInputHandler = (text) => setComment(text);
 
   const sendComment = () => {
-    setAllComments((prev) => [...prev, comment]);
+    if (!comment) return;
+    setAllComments((prev) => [...prev, { comment }]);
     setComment("");
   };
 
@@ -53,14 +55,14 @@ export default function PostsScreenEmpty({ navigation, route }) {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.mainContainer}>
         <View style={styles.photoContainer}>
-          <View style={styles.photo}>
-            <View style={styles.roundContainer}>
-              <MaterialIcons name="photo-camera" size={24} color="#BDBDBD" />
-            </View>
-          </View>
+          <Image source={{ uri: loadedPhoto }} style={styles.photo} />
+
+          {/* <View style={styles.roundContainer}>
+            <MaterialIcons name="photo-camera" size={24} color="#BDBDBD" />
+          </View> */}
         </View>
 
-        <View style={styles.commentsContainer}>
+        <View style={styles.commentsList}>
           {allComments.length > 0 && (
             <FlatList
               data={allComments}
@@ -77,7 +79,7 @@ export default function PostsScreenEmpty({ navigation, route }) {
             value={comment}
             placeholder={"Коментувати..."}
             placeholderTextColor="#BDBDBD"
-            onChangeText={commentInputHndler}
+            onChangeText={commentInputHandler}
           />
           <TouchableOpacity style={styles.button} onPress={sendComment}>
             <AntDesign name="arrowup" size={24} color="#FFFFFF" />
@@ -126,12 +128,9 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
 
-  commentsContainer: {
-    position: "relative",
-    width: "100%",
+  commentsList: {
     height: 323,
     marginBottom: 31,
-    // backgroundColor: "lightgray",
   },
 
   commentInput: {
@@ -157,25 +156,25 @@ const styles = StyleSheet.create({
   },
 
   commentContainer: {
-    width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 5,
+    marginBottom: 24,
     // backgroundColor: "rgba(0, 0, 0, 0.03)",
   },
 
-  imageBox: {
+  userImageBox: {
     width: 50,
     height: 50,
     borderRadius: 25,
+    marginRight: 16,
     backgroundColor: "yellow",
   },
 
   commentTextContainer: {
-    width: "60%",
+    width: 300,
     padding: 16,
-    backgroundColor: "tomato",
-    // backgroundColor: "rgba(0, 0, 0, 0.03)",
+    // backgroundColor: "tomato",
+    backgroundColor: "rgba(0, 0, 0, 0.03)",
   },
 
   commentTextContainerEven: {
