@@ -81,6 +81,7 @@ export default function CreatePostsScreen({ navigation }) {
       locationName,
       coords,
     });
+    console.log("post is created");
   };
 
   const resetForm = () => {

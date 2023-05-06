@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
-
+import signUpWithEmailPassword from "../../firebase/config";
 import {
   StyleSheet,
   Text,
@@ -16,24 +16,18 @@ import {
   Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  updateProfile,
+} from "firebase/auth";
 
 export default function LogInScreen({ navigation }) {
   const [loginValue, setLoginValue] = useState("");
   const [emailValue, setEmailValue] = useState("");
   const [paswordValue, setPaswordValue] = useState("");
-  const [showPassword, setShowPassword] = useState(true);
-  // const [hasPermission, setHasPermission] = useState(null);
-  // const [cameraRef, setCameraRef] = useState(null);
-  // const [type, setType] = useState(Camera.Constants.Type.back);
-
-  useEffect(() => {
-    async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      await MediaLibrary.requestPermissionsAsync();
-
-      setHasPermission(status === "granted");
-    };
-  });
+  const [hidePassword, setHidePassword] = useState(true);
 
   const loginInputHandler = (text) => {
     setLoginValue(text);
@@ -47,19 +41,32 @@ export default function LogInScreen({ navigation }) {
     setPaswordValue(text);
   };
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
+  const toggleHidePassword = () => {
+    setHidePassword(!hidePassword);
   };
 
   const AddPhoto = () => {};
 
-  const onSubmit = () => {
-    console.log(`UserData:
-    login - ${loginValue},
-     email - ${emailValue},
-     password - ${paswordValue}`);
-    resetForm();
-    navigation.navigate("PostsScreen", { loginValue, emailValue });
+  const onSubmit = async () => {
+    const auth = getAuth();
+    try {
+      const userCredentials = await createUserWithEmailAndPassword(
+        auth,
+        emailValue,
+        paswordValue
+      );
+
+      const user = auth.currentUser;
+
+      if (user) {
+        resetForm();
+        navigation.navigate("PostsScreen", { loginValue, emailValue });
+      }
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(`Error! Code --> ${errorCode}. ${errorMessage}`);
+    }
   };
 
   const resetForm = () => {
@@ -91,37 +98,37 @@ export default function LogInScreen({ navigation }) {
             <View style={styles.formContainer}>
               <Text style={styles.title}>Реєстрація</Text>
               <TextInput
-                style={[styles.formInput, styles.formInputContainer]}
                 placeholder="Логін"
                 inputMode="text"
                 value={loginValue}
                 onChangeText={loginInputHandler}
+                style={[styles.formInput, styles.formInputContainer]}
                 placeholderTextColor={"#BDBDBD"}
               />
               <TextInput
-                style={[styles.formInput, styles.formInputContainer]}
                 placeholder="Електронна пошта"
                 inputMode="email"
                 value={emailValue}
                 onChangeText={emailInputHandler}
+                style={[styles.formInput, styles.formInputContainer]}
                 placeholderTextColor={"#BDBDBD"}
               />
               <View style={styles.formInputPassContainer}>
                 <TextInput
-                  style={styles.formInput}
                   placeholder="Пароль"
                   value={paswordValue}
                   onChangeText={passwordInputHandler}
-                  secureTextEntry={showPassword}
+                  secureTextEntry={hidePassword}
+                  style={styles.formInput}
                   placeholderTextColor={"#BDBDBD"}
                 />
                 <TouchableOpacity
+                  onPress={toggleHidePassword}
                   style={styles.showPass}
-                  onPress={toggleShowPassword}
                   activeOpacity={0.4}
                 >
                   <Text style={styles.showPassTitle}>
-                    {showPassword ? "Показати" : "Сховати"}
+                    {hidePassword ? "Показати" : "Сховати"}
                   </Text>
                 </TouchableOpacity>
               </View>

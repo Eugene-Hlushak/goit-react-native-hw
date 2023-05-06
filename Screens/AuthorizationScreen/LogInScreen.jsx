@@ -10,6 +10,12 @@ import {
   ImageBackground,
   Keyboard,
 } from "react-native";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  updateProfile,
+} from "firebase/auth";
 
 export default function RegistrationScreen({ navigation }) {
   const [emailValue, setEmailValue] = useState("");
@@ -28,13 +34,31 @@ export default function RegistrationScreen({ navigation }) {
     setShowPassword(!showPassword);
   };
 
-  const onSubmit = () => {
-    console.log(`UserData:
-     email - ${emailValue},
-     password - ${paswordValue}`);
-    resetForm();
-    navigation.navigate("PostsScreen", { emailValue });
+  const onSubmit = async () => {
+    const auth = getAuth();
+    try {
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        emailValue,
+        paswordValue
+      );
+      console.log(userCredentials);
+
+      const user = auth.currentUser;
+
+      if (user) {
+        resetForm();
+        navigation.navigate("PostsScreen", { emailValue });
+      }
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(`Error! Code --> ${errorCode}. ${errorMessage}`);
+    }
+    // resetForm();
+    // navigation.navigate("PostsScreen", { emailValue });
   };
+
   const resetForm = () => {
     setEmailValue("");
     setPaswordValue("");

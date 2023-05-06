@@ -1,6 +1,10 @@
 import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import "react-native-gesture-handler";
+// import { PersistGate } from "redux-persist/integration/react";
+// import { Provider } from "react-redux";
+// import store from "./redux/store/store";
 import RegistrationScreen from "./Screens/AuthorizationScreen/RegistrationScreen";
 import LogInScreen from "./Screens/AuthorizationScreen/LogInScreen";
 import PostsScreen from "./Screens/MainScreen/PostsScreen";
@@ -8,6 +12,7 @@ import CreatePostsScreen from "./Screens/MainScreen/CreatePostsScreen";
 import CommentsScreen from "./Screens/MainScreen/CommentsScreen";
 import MapScreen from "./Screens/MainScreen/MapScreen";
 import Home from "./Screens/TestScreen";
+import "./firebase/config";
 
 const AppStack = createStackNavigator();
 
@@ -20,6 +25,11 @@ export default function App() {
   }
 
   return (
+    // <Provider store={store.store}>
+    //   <PersistGate
+    //     loading={<Text>Loading...</Text>}
+    //     persistor={store.persistor}
+    //   >
     <NavigationContainer>
       <AppStack.Navigator>
         {/* <AppStack.Screen name="TestScreen" component={Home} /> */}
@@ -42,5 +52,7 @@ export default function App() {
         <AppStack.Screen name="MapScreen" component={MapScreen} />
       </AppStack.Navigator>
     </NavigationContainer>
+    //   </PersistGate>
+    // </Provider>
   );
 }
