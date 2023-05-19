@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
-import signUpWithEmailPassword from "../../firebase/config";
 import {
   StyleSheet,
   Text,
@@ -57,10 +56,12 @@ export default function LogInScreen({ navigation }) {
       );
 
       const user = auth.currentUser;
-
+      console.log("registered user --> ", user);
+      console.log("Please enter a username and password");
       if (user) {
         resetForm();
         navigation.navigate("PostsScreen", { loginValue, emailValue });
+      } else {
       }
     } catch (error) {
       const errorCode = error.code;

@@ -26,13 +26,11 @@ export default function CreatePostsScreen({ navigation }) {
   const [type, setType] = useState(Camera.Constants.Type.back);
 
   useEffect(() => {
-    if (hasPermission === null) {
-      async () => {
-        const { status } = await Camera.requestCameraPermissionsAsync();
-        setHasPermission(status === "granted");
-        console.log(hasPermission);
-      };
-    }
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === "granted");
+      console.log(hasPermission);
+    })();
   }, []);
 
   useEffect(() => {

@@ -45,7 +45,7 @@ export default function RegistrationScreen({ navigation }) {
       console.log(userCredentials);
 
       const user = auth.currentUser;
-
+      console.log("logined user --> ", user);
       if (user) {
         resetForm();
         navigation.navigate("PostsScreen", { emailValue });
@@ -55,8 +55,6 @@ export default function RegistrationScreen({ navigation }) {
       const errorMessage = error.message;
       console.log(`Error! Code --> ${errorCode}. ${errorMessage}`);
     }
-    // resetForm();
-    // navigation.navigate("PostsScreen", { emailValue });
   };
 
   const resetForm = () => {
